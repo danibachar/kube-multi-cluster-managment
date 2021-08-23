@@ -1,0 +1,73 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: serviceimports-svc
+spec:
+  selector:
+    app: serviceimports
+  ports:
+    - protocol: "TCP"
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: serviceimports
+  labels:
+    app: serviceimports
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: serviceimports
+  template:
+    metadata:
+      labels:
+        app: serviceimports
+    spec:
+      containers:
+        - name: serviceimports-container
+          image: danibachar/serviceimports-msvc:latest
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: "250m"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: serviceimports-reader
+rules:
+- apiGroups: ["multicluster.x-k8s.io"] # "" indicates the core API group
+  resources: ["serviceimports"]
+  verbs: ["get", "watch", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: serviceimports-reader
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: serviceimports-reader
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: default
+---
+# apiVersion: autoscaling/v1
+# kind: HorizontalPodAutoscaler
+# metadata:
+#   name: serviceimports-hpa
+# spec:
+#   scaleTargetRef:
+#     apiVersion: apps/v1
+#     kind: Deployment
+#     name: serviceimports
+#   minReplicas: 1
+#   maxReplicas: 10
+#   targetCPUUtilizationPercentage: 50

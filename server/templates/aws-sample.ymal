@@ -1,0 +1,7 @@
+clusterctl generate cluster aws-test \
+  --infrastructure aws \
+  --kubernetes-version v1.20.0 \
+  --control-plane-machine-count=3 \
+  --worker-machine-count=3 \
+  --target-namespace=foo \
+  > aws-test.yaml

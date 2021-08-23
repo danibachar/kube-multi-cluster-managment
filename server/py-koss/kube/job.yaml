@@ -1,0 +1,29 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: koss
+  namespace: default
+spec:
+  schedule: "*/1 * * * *" # Every 5 min
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: hello
+            image: danibachar/koss-job:latest
+            imagePullPolicy: Always
+            command:
+            - /bin/sh
+            - -c
+            - python job.py
+            env:
+            - name: METRICS
+              value: "submariner_connection_latency_seconds"
+            - name: HTTP_REQUEST_SCHEME
+              value: "http"
+            - name: SERVICE_IMPORT_ENDPOINT
+              value: "serviceimports.default.clusterset.local" #34.106.143.71:8081 #
+            - name: DEBUG_MODE
+              value: "true"
+          restartPolicy: OnFailure
