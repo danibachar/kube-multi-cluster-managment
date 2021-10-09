@@ -54,13 +54,13 @@ class ServiceImport:
         self.cluster_ip = self._service_cluster_ip_from(metadata)
         self.port = self._service_port_from(dic)
 
-    def _service_details_from_metadata(metadata):
+    def _service_details_from_metadata(self, metadata):
         labels = metadata.get("labels", None)
         if labels == None:
             raise Exception("service_details_from_metadata")
         return labels.get("lighthouse.submariner.io/sourceCluster", None), labels.get("lighthouse.submariner.io/sourceName", None), labels.get("lighthouse.submariner.io/sourceNamespace", None)
 
-    def _service_port_from(item):
+    def _service_port_from(self, item):
         spec = item.get("spec", None)
         if spec == None:
             raise Exception("service_port_from 1")
@@ -69,7 +69,7 @@ class ServiceImport:
             raise Exception("service_port_from 2")
         return ports[0].get("port", None)
 
-    def _service_cluster_ip_from(metadata):
+    def _service_cluster_ip_from(self, metadata):
         annotations = metadata.get("annotations", None)
         if annotations == None:
             raise Exception("service_cluster_ip_from")
