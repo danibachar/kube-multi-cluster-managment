@@ -12,7 +12,7 @@ spec:
           containers:
           - name: hello
             image: danibachar/koss-job:latest
-            imagePullPolicy: Always
+            imagePullPolicy: Always # to conserve on pulling can change to not allways pull
             command:
             - /bin/sh
             - -c
@@ -23,7 +23,7 @@ spec:
             - name: HTTP_REQUEST_SCHEME
               value: "http"
             - name: SERVICE_IMPORT_ENDPOINT
-              value: "serviceimports.default.clusterset.local:8080" #34.106.143.71:8081 #
+              value: "serviceimports-svc.default.svc.clusterset.local:8080" #34.106.143.71:8081 #
             - name: DEBUG_MODE
               value: "true"
           restartPolicy: OnFailure
