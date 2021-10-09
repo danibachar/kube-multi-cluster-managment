@@ -20,14 +20,20 @@ from models import Cluster, ServiceImport, ClusterMetrics
 from utils import EnvVarConfig, get_logger
 import requests
 
+logger = get_logger()
+
 cfg = EnvVarConfig()
 HTTP_REQUEST_SCHEME = cfg.get("HTTP_REQUEST_SCHEME", str)
 SERVICE_IMPORT_ENDPOINT = cfg.get("SERVICE_IMPORT_ENDPOINT", str)
 METRICS = cfg.get("METRICS", list)
 METRICS_QUERY_PATH = "/api/v1/query"
 
+def fetch(url, json_parser, params = {}):
+    response = requests.get(url, params=params)
+    response.raise_for_status()
 
-logger = get_logger()
+    json = response.json()
+    return json_parser(json)
 
 # ServiceImports Fetching
 
@@ -38,11 +44,7 @@ def import_services_from(json):
 
 def fetch_all_imported_services():
     service_import_api = "http://{}".format(SERVICE_IMPORT_ENDPOINT)
-    response = requests.get(service_import_api)
-    response.raise_for_status()
-
-    json = response.json()
-    return import_services_from(json)
+    return fetch(service_import_api, import_services_from)
 
 # ClusterMetrics Fetching
 
@@ -59,11 +61,7 @@ def fetch_metrics_form_all(monitoring_endpoints):
     for ep in monitoring_endpoints:
         for metric in METRICS:
             api_request_ep = "http://{}/{}".format(ep, METRICS_QUERY_PATH)
-            response = requests.get(api_request_ep, params={"query": metric})
-            response.raise_for_status()
-
-            json = response.json()
-            metrics.append(source_to_target_latency_in_seconds(json))
+            metrics.append(fetch(api_request_ep, source_to_target_latency_in_seconds, {"query": metric}))
     return metrics
 
 

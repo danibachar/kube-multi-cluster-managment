@@ -31,20 +31,19 @@ def get_logger(level=logging.INFO):
 def get_logging_handler(level=logging.INFO):
     if should_debug_logger:
         level = logging.DEBUG
-    else:
-        handler = logging.StreamHandler(stream=sys.stdout)
-        formatter = ColoredFormatter(
-            "%(log_color)s%(levelname)-8s%(reset)s %(asctime)s %(green)s%(name)s"
-            "%(reset)s %(message)s",
-            reset=True,
-            log_colors={
-                'DEBUG':    'cyan',
-                'INFO':     'blue',
-                'WARNING':  'yellow',
-                'ERROR':    'red',
-                'CRITICAL': 'red,bg_white',
-            }
-        )
-        handler.setFormatter(formatter)
+    handler = logging.StreamHandler(stream=sys.stdout)
+    formatter = ColoredFormatter(
+        "%(log_color)s%(levelname)-8s%(reset)s %(asctime)s %(green)s%(name)s"
+        "%(reset)s %(message)s",
+        reset=True,
+        log_colors={
+            'DEBUG':    'cyan',
+            'INFO':     'blue',
+            'WARNING':  'yellow',
+            'ERROR':    'red',
+            'CRITICAL': 'red,bg_white',
+        }
+    )
+    handler.setFormatter(formatter)
     handler.setLevel(level)
     return handler
