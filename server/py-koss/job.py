@@ -69,8 +69,8 @@ if __name__ == '__main__':
     monitoring_services = list(
         filter(lambda svc: "prometheus" in svc.name.lower(), imported_services))
 
-    monitoring_endpoints = list(
-        map(lambda svc: svc.clsuterset_end_point, monitoring_services))
+    monitoring_endpoints = list(set(
+        map(lambda svc: svc.clsuterset_end_point, monitoring_services)))
 
     metrics = fetch_metrics_form_all(monitoring_endpoints)
 

@@ -42,6 +42,9 @@ class ClusterMetrics:
         self.source = metric.get("local_cluster", None)
         self.remote = metric.get("remote_cluster", None)
 
+    def __str__(self) -> str:
+        return self.__repr__
+
     def __repr__(self):
         return "The latency from {} to {} is {} ms".format(self.source, self.remote, self.latncy_in_ms)
 
@@ -78,6 +81,9 @@ class ServiceImport:
     @property
     def clsuterset_end_point(self):
         return "{}.{}.{}.svc.clusterset.local:{}".format(self.cluster_name, self.name, self.namespace, self.port)
+
+    def __str__(self) -> str:
+        return self.__repr__
 
     def __repr__(self):
         return self.clsuterset_end_point
