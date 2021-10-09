@@ -53,6 +53,7 @@ def fetch_metrics_form_all(monitoring_endpoints):
     def parser(json):
         results = json.get("data", {}).get("result", [])
         return list(map(lambda res: ClusterMetrics(res), results))
+    metrics = []
     for ep in monitoring_endpoints:
         for metric in METRICS:
             api_request_ep = "http://{}/{}".format(ep, METRICS_QUERY_PATH)
