@@ -28,7 +28,9 @@ SERVICE_IMPORT_ENDPOINT = cfg.get("SERVICE_IMPORT_ENDPOINT", str)
 METRICS = cfg.get("METRICS", list)
 METRICS_QUERY_PATH = "/api/v1/query"
 
-def fetch(url, json_parser, params = {}):
+
+def fetch(url, json_parser, params={}):
+    logger.info("fetching: {} with params: {}".format(url, params))
     response = requests.get(url, params=params)
     response.raise_for_status()
 
@@ -38,30 +40,24 @@ def fetch(url, json_parser, params = {}):
 # ServiceImports Fetching
 
 
-def import_services_from(json):
-    return list(map(lambda item: ServiceImport(item), json.get("items", [])))
-
-
 def fetch_all_imported_services():
+    def parser(json):
+        return list(map(lambda item: ServiceImport(item), json.get("items", [])))
     service_import_api = "http://{}".format(SERVICE_IMPORT_ENDPOINT)
-    return fetch(service_import_api, import_services_from)
+    return fetch(service_import_api, parser)
 
 # ClusterMetrics Fetching
 
 
-def source_to_target_latency_in_seconds(json):
-    results = json.get("data", {}).get("result", None)
-    if results == None or len(results) == 0:
-        raise Exception("source_to_target_latency_in_seconds 1")
-    return list(map(lambda res: ClusterMetrics(res), results))
-
-
 def fetch_metrics_form_all(monitoring_endpoints):
-    metrics = []
+    def parser(json):
+        results = json.get("data", {}).get("result", [])
+        return list(map(lambda res: ClusterMetrics(res), results))
     for ep in monitoring_endpoints:
         for metric in METRICS:
             api_request_ep = "http://{}/{}".format(ep, METRICS_QUERY_PATH)
-            metrics.append(fetch(api_request_ep, source_to_target_latency_in_seconds, {"query": metric}))
+            metrics.append(
+                fetch(api_request_ep, parser, {"query": metric}))
     return metrics
 
 
