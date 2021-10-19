@@ -13,5 +13,7 @@ spec:
       paths:
       - path: /v1/product/*
         backend:
-          serviceName: product
-          servicePort: 80
+          service: 
+            name: product
+            port: 
+              number: 80
