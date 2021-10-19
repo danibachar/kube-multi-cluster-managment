@@ -16,13 +16,13 @@
 #
 ##############################################
 cleanup:
-	delete-deploy
+	delete-bookinfo
 
 build:
 	docker build -f Dockerfile -t danibachar/tester:latest .
 	docker push danibachar/tester:latest
 
-deploy-bookinfo: build
+deploy-bookinfo:
 	kubectl apply -f bookinfo/
 
 delete-bookinfo:

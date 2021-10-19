@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bookinfo
+  annotations:
+    # kubernetes.io/ingress.global-static-ip-name: "" # Can connect to an external global IP from the relevant Cloud Provider
+    kubernetes.io/ingress.enable-cors: "true"
+    kubernetes.io/ingress.allow-http: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /v1/product/*
+        backend:
+          serviceName: product
+          servicePort: 80
