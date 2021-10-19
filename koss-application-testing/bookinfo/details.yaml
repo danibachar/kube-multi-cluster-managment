@@ -35,7 +35,7 @@ spec:
     selector:
         app: details
     ports:
-    - port: 80
+    - port: 31001
       nodePort: 31001
       targetPort: http-port
       protocol: TCP

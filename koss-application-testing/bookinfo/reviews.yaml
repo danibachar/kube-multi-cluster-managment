@@ -38,7 +38,7 @@ spec:
     selector:
         app: reviews
     ports:
-    - port: 80
+    - port: 31002
       nodePort: 31002
       targetPort: http-port
       protocol: TCP
