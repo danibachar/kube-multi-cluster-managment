@@ -19,5 +19,7 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - name: Build the Docker image
+    - name: Build and upload server images
       run: cd server && make release-all
+    - name: Build and upload testing image
+      run: cd koss && make build

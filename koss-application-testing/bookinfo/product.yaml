@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: product
+spec:
+    replicas: 3
+    template:
+        metadata:
+            name: product
+            labels:
+                app: product
+        spec:
+            containers:
+            - name: product
+              image: danibachar/tester:latest
+              env:
+              - name: DEPENDENCIES
+                value: "{\n  \"destinations\" : [\n    {\n      \"target\": \"http://details.default.svc.cluster.local\",\n      \"request_payload_kb_size\": 50,\n      \"config\": {\n        \"memory_params\": {\n          \"duration_seconds\": 0.2,\n          \"kb_count\": 50\n        },\n        \"cpu_params\": {\n          \"duration_seconds\": 0.2,\n          \"load\": 0.2\n        }\n      }\n    },\n    {\n      \"target\": \"http://reviews.default.svc.cluster.local\",\n      \"request_payload_kb_size\": 50,\n    \"config\": {\n        \"memory_params\": {\n          \"duration_seconds\": 0.2,\n          \"kb_count\": 50\n        },\n        \"cpu_params\": {\n          \"duration_seconds\": 0.2,\n          \"load\": 0.2\n        }\n      }\n    }\n  ]\n}"
+              ports:
+              - name: http-port
+                containerPort: 8081
+              resources:
+                  requests:
+                      cpu: 200m
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: product
+spec:
+    type: LoadBalancer
+    selector:
+        app: product
+    ports:
+    - port: 31001
+      nodePort: 31001
+      targetPort: http-port
+      protocol: TCP
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+    name: product-autoscaler
+spec:
+    scaleTargetRef:
+        apiVersion: extensions/v1beta1
+        kind: Deployment
+        name: product
+    minReplicas: 3
+    maxReplicas: 50
+    targetCPUUtilizationPercentage: 50
