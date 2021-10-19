@@ -35,8 +35,8 @@ spec:
     selector:
         app: rating
     ports:
-    - port: 31001
-      nodePort: 31001
+    - port: 31003
+      nodePort: 31003
       targetPort: http-port
       protocol: TCP
 ---
