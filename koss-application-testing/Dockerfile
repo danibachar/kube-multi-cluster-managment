@@ -8,5 +8,5 @@ RUN pip3 install --no-cache-dir -r /app/requirements.txt
 
 WORKDIR /app
 # For local testing
-EXPOSE 80
+EXPOSE 8081
 CMD ["python", "app.py"]

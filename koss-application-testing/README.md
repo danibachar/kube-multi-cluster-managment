@@ -51,7 +51,7 @@ watch kubectl get pods,nodes,hpa,services
 
 # Supplied Applications:
 
-# Create dependencies and pass params 
+## Create dependencies and pass params 
 - use env var for the containers
 - example that creates config for two dependencies and the load to create on them provided here:
 ```
@@ -86,5 +86,20 @@ watch kubectl get pods,nodes,hpa,services
       }
     }
   ]
+}
+```
+
+## Example API request to a service to create certain CPU/RAM load
+
+```
+{
+  "memory_params": {
+    "duration_seconds": 0.2,
+    "kb_count": 50
+  },
+  "cpu_params": {
+    "duration_seconds": 0.2,
+    "load": 0.2
+  }
 }
 ```
