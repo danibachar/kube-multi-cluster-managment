@@ -12,6 +12,7 @@ spec:
   - http:
       paths:
       - path: /v1/product/*
+        pathType: Prefix
         backend:
           service: 
             name: product
