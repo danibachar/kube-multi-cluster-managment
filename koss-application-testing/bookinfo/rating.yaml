@@ -16,6 +16,7 @@ spec:
             containers:
             - name: rating
               image: danibachar/tester:latest
+              imagePullPolicy: Always # to conserve on pulling can change to not allways pull
               env:
               - name: RETURN_VALUE
                 value: "rating"
