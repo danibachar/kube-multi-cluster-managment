@@ -23,7 +23,7 @@ build:
 	docker push danibachar/tester:latest
 
 deploy-bookinfo: build
-	kubectl apply -f bookinfo/services/
+	kubectl apply -f bookinfo/
 
 delete-bookinfo:
-	kubectl delete -f bookinfo/services/
+	kubectl delete -f bookinfo/

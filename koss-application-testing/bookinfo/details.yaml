@@ -4,6 +4,9 @@ metadata:
     name: details
 spec:
     replicas: 3
+    selector:
+        matchLabels:
+            app: details
     template:
         metadata:
             name: details
@@ -13,6 +16,9 @@ spec:
             containers:
             - name: details
               image: danibachar/tester:latest
+              env:
+              - name: RETURN_VALUE
+                value: "details"
               ports:
               - name: http-port
                 containerPort: 8081

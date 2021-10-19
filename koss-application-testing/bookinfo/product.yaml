@@ -4,6 +4,9 @@ metadata:
     name: product
 spec:
     replicas: 3
+    selector:
+        matchLabels:
+            app: product
     template:
         metadata:
             name: product
@@ -14,6 +17,8 @@ spec:
             - name: product
               image: danibachar/tester:latest
               env:
+              - name: RETURN_VALUE
+                value: "product"
               - name: DEPENDENCIES
                 value: "{\n  \"destinations\" : [\n    {\n      \"target\": \"http://details.default.svc.cluster.local\",\n      \"request_payload_kb_size\": 50,\n      \"config\": {\n        \"memory_params\": {\n          \"duration_seconds\": 0.2,\n          \"kb_count\": 50\n        },\n        \"cpu_params\": {\n          \"duration_seconds\": 0.2,\n          \"load\": 0.2\n        }\n      }\n    },\n    {\n      \"target\": \"http://reviews.default.svc.cluster.local\",\n      \"request_payload_kb_size\": 50,\n    \"config\": {\n        \"memory_params\": {\n          \"duration_seconds\": 0.2,\n          \"kb_count\": 50\n        },\n        \"cpu_params\": {\n          \"duration_seconds\": 0.2,\n          \"load\": 0.2\n        }\n      }\n    }\n  ]\n}"
               ports:

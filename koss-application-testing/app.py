@@ -47,7 +47,7 @@ async def generate_cpu_load(params):
 
 
 async def propogate_request():
-    dsts = os.environ.get("DESTINATIONS", "")
+    dsts = os.environ.get("DEPENDENCIES", "")
     if dsts == "":
         return
     futures = []
@@ -62,7 +62,8 @@ async def propogate_request():
         config["dummy_paload_just_for_size"] = memory_chunk(payload_kb_size)
         f = loop.run_in_executor(None, requests.post, target, None, config)
         futures.append(f)
-    await asyncio.gather(futures)
+    res, _ = loop.run_until_complete(asyncio.wait(asyncio.gather(futures)))
+    return map(lambda d: d.results, res).join("|")
 
 
 @app.route('/health', methods=['GET'])
@@ -79,7 +80,7 @@ async def load():
         propogate_request(),
     )
 
-    return 'OK'
+    return os.environ.get("RETURN_VALUE", "OK")
 
 
 if __name__ == '__main__':

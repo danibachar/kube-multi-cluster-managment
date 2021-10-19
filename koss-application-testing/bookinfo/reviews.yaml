@@ -4,6 +4,9 @@ metadata:
     name: reviews
 spec:
     replicas: 3
+    selector:
+        matchLabels:
+            app: reviews
     template:
         metadata:
             name: reviews
@@ -14,6 +17,9 @@ spec:
             - name: reviews
               image: danibachar/tester:latest
               env:
+              env:
+              - name: RETURN_VALUE
+                value: "reviews"
               - name: DEPENDENCIES
                 value: "{\n  \"destinations\" : [\n    {\n      \"target\": \"http://rating\",\n      \"request_payload_kb_size\": 50,\n      \"config\": {\n        \"memory_params\": {\n          \"duration_seconds\": 0.2,\n          \"kb_count\": 50\n        },\n        \"cpu_params\": {\n          \"duration_seconds\": 0.2,\n          \"load\": 0.2\n        }\n      }\n    }\n  ]\n}"
               ports:

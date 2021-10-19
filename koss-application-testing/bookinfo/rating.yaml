@@ -4,6 +4,9 @@ metadata:
     name: rating
 spec:
     replicas: 3
+    selector:
+        matchLabels:
+            app: rating
     template:
         metadata:
             name: rating
@@ -13,6 +16,9 @@ spec:
             containers:
             - name: rating
               image: danibachar/tester:latest
+              env:
+              - name: RETURN_VALUE
+                value: "rating"
               ports:
               - name: http-port
                 containerPort: 8081
