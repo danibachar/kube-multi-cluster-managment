@@ -62,9 +62,9 @@ async def propogate_request():
         config["dummy_paload_just_for_size"] = memory_chunk(payload_kb_size)
         f = loop.run_in_executor(None, requests.post, target, None, config)
         futures.append(f)
-    responses = loop.run_until_complete(asyncio.gather(futures))
+    responses = loop.run_until_complete(asyncio.gather(**futures))
     print(responses)
-    return "|".join(map(lambda d: d.results, responses))
+    return "|".join(filter(lambda r: r != "", responses))
 
 
 @app.route('/health', methods=['GET'])
@@ -82,7 +82,7 @@ def load():
         generate_cpu_load(load_options.get('cpu_params', {})),
         propogate_request(),
     ))
-    return "|".join(([os.environ.get("RETURN_VALUE", "NOT_SET")] + responses))
+    return "|".join(([os.environ.get("RETURN_VALUE", "NOT_SET")] + list(filter(lambda r: r != "", responses))))
 
 
 if __name__ == '__main__':

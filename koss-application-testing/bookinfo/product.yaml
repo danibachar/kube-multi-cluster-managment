@@ -21,7 +21,7 @@ spec:
               - name: RETURN_VALUE
                 value: "product"
               - name: DEPENDENCIES
-                value: "{\n  \"destinations\" : [\n    {\n      \"target\": \"http://details.default.svc.cluster.local\",\n      \"request_payload_kb_size\": 50,\n      \"config\": {\n        \"memory_params\": {\n          \"duration_seconds\": 0.2,\n          \"kb_count\": 50\n        },\n        \"cpu_params\": {\n          \"duration_seconds\": 0.2,\n          \"load\": 0.2\n        }\n      }\n    },\n    {\n      \"target\": \"http://reviews.default.svc.cluster.local\",\n      \"request_payload_kb_size\": 50,\n    \"config\": {\n        \"memory_params\": {\n          \"duration_seconds\": 0.2,\n          \"kb_count\": 50\n        },\n        \"cpu_params\": {\n          \"duration_seconds\": 0.2,\n          \"load\": 0.2\n        }\n      }\n    }\n  ]\n}"
+                value: "{\"destinations\":[{\"target\":\"http://details.default.svc.cluster.local\",\"request_payload_kb_size\":50,\"config\":{\"memory_params\":{\"duration_seconds\":0.2,\"kb_count\":50},\"cpu_params\":{\"duration_seconds\":0.2,\"load\":0.2}}},{\"target\":\"http://reviews.default.svc.cluster.local\",\"request_payload_kb_size\":50,\"config\":{\"memory_params\":{\"duration_seconds\":0.2,\"kb_count\":50},\"cpu_params\":{\"duration_seconds\":0.2,\"load\":0.2}}}]}"
               ports:
               - name: http-port
                 containerPort: 8081

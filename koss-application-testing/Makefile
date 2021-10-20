@@ -15,8 +15,7 @@
 #
 #
 ##############################################
-cleanup:
-	delete-bookinfo
+cleanup: delete-bookinfo
 
 build:
 	docker build -f Dockerfile -t danibachar/tester:latest .
