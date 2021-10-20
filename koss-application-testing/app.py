@@ -62,7 +62,7 @@ async def propogate_request():
         config["dummy_paload_just_for_size"] = memory_chunk(payload_kb_size)
         f = loop.run_in_executor(None, requests.post, target, None, config)
         futures.append(f)
-    responses = loop.run_until_complete(asyncio.gather(**futures))
+    responses = loop.run_until_complete(asyncio.gather(*futures))
     print(responses)
     return "|".join(filter(lambda r: r != "", responses))
 
