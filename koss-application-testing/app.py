@@ -64,7 +64,7 @@ async def propogate_request():
         futures.append(f)
     responses = await asyncio.gather(*futures)
     print(responses)
-    return "|".join(filter(lambda r: r != "", responses))
+    return "|".join(filter(lambda t: t != "", map(lambda res: res.text, responses)))
 
 
 @app.route('/health', methods=['GET'])
