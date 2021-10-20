@@ -51,7 +51,7 @@ async def generate_cpu_load(params):
 async def propogate_request():
     dsts = os.environ.get("DEPENDENCIES", "")
     if dsts == "":
-        return ""
+        return []
     futures = []
     for dst in json.loads(dsts).get("destinations", []):
         target = dst.get("target", None)
@@ -64,7 +64,7 @@ async def propogate_request():
         futures.append(f)
     responses = await asyncio.gather(*futures)
     print(responses)
-    return "|".join(filter(lambda t: t != "", map(lambda res: res.text, responses)))
+    return list(filter(lambda t: t != "", map(lambda res: res.text, responses)))
 
 
 @app.route('/health', methods=['GET'])
@@ -82,7 +82,12 @@ def load():
         generate_cpu_load(load_options.get('cpu_params', {})),
         propogate_request(),
     ))
-    return "|".join(([os.environ.get("RETURN_VALUE", "NOT_SET")] + list(filter(lambda r: r != "", responses))))
+    my_name = os.environ.get("RETURN_VALUE", "NOT_SET")
+    propogated_services = responses[-1]  # Note propogate_request is last
+    res = ""
+    for ps in propogated_services:
+        res += "{} -> {}\n".format(my_name, ps)
+    return res
 
 
 if __name__ == '__main__':
