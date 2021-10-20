@@ -63,7 +63,6 @@ async def propogate_request():
         f = loop.run_in_executor(None, requests.post, target, None, config)
         futures.append(f)
     responses = await asyncio.gather(*futures)
-    print(responses)
     return list(filter(lambda t: t != "", map(lambda res: res.text, responses)))
 
 
@@ -85,8 +84,11 @@ def load():
     my_name = os.environ.get("RETURN_VALUE", "NOT_SET")
     propogated_services = responses[-1]  # Note propogate_request is last
     res = ""
-    for ps in propogated_services:
-        res += "{} -> {}\n".format(my_name, ps)
+    if len(propogated_services) == 0:
+        res = my_name
+    else:
+        for ps in propogated_services:
+            res += "{} -> {}\n".format(my_name, ps)
     return res
 
 
