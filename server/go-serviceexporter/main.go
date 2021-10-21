@@ -68,7 +68,7 @@ func main() {
 
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
-	e.PUT("/", func(c echo.Context) error {
+	e.PUT("/export", func(c echo.Context) error {
 		log.Info("1")
 		exports := new(Exports)
 		if err := c.Bind(exports); err != nil {

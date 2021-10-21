@@ -135,7 +135,7 @@ function deploy-submariner() {
 function deploy-koss-services-on-clusters() {
     # Deploy optimizer only on borker
     kubectl config use-context cluster1
-    kubectl apply -f py-koss/kube/job.yaml
+    # kubectl apply -f py-koss/kube/job.yaml
     # Deploy koss services
     local num_clusters=${1}
 
@@ -143,8 +143,10 @@ function deploy-koss-services-on-clusters() {
         kubectl config use-context "cluster${i}"
         # Service-Imports
         kubectl apply -f go-serviceimports/kube/app.yaml
+        subctl export service serviceimports-scv
         # Service-Exporter
         kubectl apply -f go-serviceexporter/kube/app.yaml
+        subctl export service serviceexporter-svc
         echo
     done
 }

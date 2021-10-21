@@ -34,9 +34,10 @@ function clean-clusters() {
         echo
 
     done
+    kubectl config view
 
 }
-echo "Creating ${NUM_CLUSTERS} clusters"
+echo "Deleting ${NUM_CLUSTERS} clusters"
 clean-clusters "${NUM_CLUSTERS}"
 rm -rf submariner-cheatsheet
-eccho "Completed"
+echo "Completed"
