@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: serviceimports-svc
+  name: serviceexporter-svc
 spec:
   selector:
-    app: serviceimports
+    app: serviceexporter
   ports:
     - protocol: "TCP"
       port: 8080
@@ -14,22 +14,22 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: serviceimports
+  name: serviceexporter
   labels:
-    app: serviceimports
+    app: serviceexporter
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: serviceimports
+      app: serviceexporter
   template:
     metadata:
       labels:
-        app: serviceimports
+        app: serviceexporter
     spec:
       containers:
-        - name: serviceimports-container
-          image: danibachar/serviceimports-msvc:latest
+        - name: serviceexporter-container
+          image: danibachar/serviceexporter-msvc:latest
           ports:
             - containerPort: 8080
           imagePullPolicy: Always
@@ -40,20 +40,20 @@ spec:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: serviceimports-reader
+  name: serviceexporter
 rules:
 - apiGroups: ["multicluster.x-k8s.io"] # "" indicates the core API group
-  resources: ["serviceimport"]
+  resources: ["serviceexport"]
   verbs: ["get", "watch", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: serviceimports-reader
+  name: serviceexporter
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: serviceimports-reader
+  name: serviceexporter
 subjects:
 - kind: ServiceAccount
   name: default
@@ -62,12 +62,12 @@ subjects:
 # apiVersion: autoscaling/v1
 # kind: HorizontalPodAutoscaler
 # metadata:
-#   name: serviceimports-hpa
+#   name: serviceexporter-hpa
 # spec:
 #   scaleTargetRef:
 #     apiVersion: apps/v1
 #     kind: Deployment
-#     name: serviceimports
+#     name: serviceexporter
 #   minReplicas: 1
 #   maxReplicas: 10
 #   targetCPUUtilizationPercentage: 50
