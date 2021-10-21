@@ -66,16 +66,23 @@ if __name__ == '__main__':
     # Run TODO!
     imported_services = fetch_all_imported_services()
 
+    # For getting metrics and relevant data from all clusters
     monitoring_services = list(
         filter(lambda svc: "prometheus" in svc.name.lower(), imported_services))
-
     monitoring_endpoints = list(set(
         map(lambda svc: svc.clsuterset_end_point, monitoring_services)))
-
+    # The relevant metrics
     metrics = fetch_metrics_form_all(monitoring_endpoints)
+    # For exporting services with new weights per cluster
+    exporting_services = list(
+        filter(lambda svc: "serviceexporter" in svc.name.lower(), imported_services))
+    exporting_endpoints = list(set(
+        map(lambda svc: svc.clsuterset_end_point, exporting_services)))
 
     # TODO - build our clusters simiilarly to pass to the optimization and get weights
-
+    # TODO - after building clusters and running optimization configure new service export with annotations for each service per cluster
+    logger.info("exporting_services", exporting_services)
     logger.info("monitoring_services", monitoring_services)
     logger.info("imported_services", imported_services)
     logger.info("metrics", metrics)
+    # TODO -
