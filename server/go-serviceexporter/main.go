@@ -2,8 +2,9 @@ package main
 
 import (
 	"context"
-	"net/http"
 	"os"
+
+	"net/http"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -37,11 +38,6 @@ func export(services Exports) error {
 	if err != nil {
 		return err
 	}
-	// validate service exists locally
-	_, err = kubeClientSet.CoreV1().Services(serviceNamespace).Get(context.TODO(), svcName, metav1.GetOptions{})
-	if err != nil {
-		return err
-	}
 	// Create the export
 	// mcsServiceExport := &v1alpha1.ServiceExport{
 	// 	ObjectMeta: metav1.ObjectMeta{
@@ -50,8 +46,14 @@ func export(services Exports) error {
 	// 		Annotations: withAnnotations,
 	// 	},
 	// }
+
 	for _, svcExport := range services.servicesToExport {
-		_, err := mcsClientSet.MulticlusterV1alpha1.ServiceExport(svcExport.metadata.Namespace).Create(context.TODO(), svcExport, metav1.CreateOption{})
+		// validate service exists locally
+		_, err := kubeClientSet.CoreV1().Services(svcExport.metadata.Namespace).Get(context.TODO(), svcExport.metadata.Name, metav1.GetOptions{})
+		if err != nil {
+			continue
+		}
+		_, err = mcsClientSet.MulticlusterV1alpha1.ServiceExport(svcExport.metadata.Namespace).Create(context.TODO(), svcExport, metav1.CreateOption{})
 		if err != nil {
 			return err
 		}
@@ -63,17 +65,31 @@ type Exports struct {
 	servicesToExport []v1alpha1.ServiceExport `json:"servicesToExport,omitempty"`
 }
 
+// type Metadata struct {
+// 	Name        string            `json:"name,omitempty"`
+// 	Namespace   string            `json:"namespace,omitempty"`
+// 	Annotations map[string]string `json:"annotations,omitempty"`
+// }
+// type Export struct {
+// 	Metadata Metadata `json:"metadata,omitempty"`
+// }
+// type Exports struct {
+// 	ServicesToExport []Export `json:"servicesToExport,omitempty"`
+// }
+
 func main() {
 	e := echo.New()
 
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
-	e.PUT("/export", func(c echo.Context) error {
+	e.PUT("/", func(c echo.Context) error {
 		log.Info("1")
 		exports := new(Exports)
 		if err := c.Bind(exports); err != nil {
 			return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 		}
+		log.Info(exports)
+		return c.JSON(http.StatusOK, exports)
 		err := export(*exports)
 		log.Info("2")
 		if err != nil {
