@@ -22,8 +22,7 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-# shellcheck source=util.sh
-source "${BASH_SOURCE%/*}/util.sh"
+NUM_CLUSTERS="${NUM_CLUSTERS:-2}"
 
 function clean-clusters() {
     local num_clusters=${1}
