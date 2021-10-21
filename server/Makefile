@@ -72,6 +72,25 @@ delete-serviceimports:
 expose-serviceimports:
 	kubectl port-forward service/serviceimports-msvc 8080:8080
 
+####### Service Imports
+build-serviceexporter:
+	docker build -f go-serviceexporter/Dockerfile -t danibachar/serviceexporter-msvc:latest  ..
+
+run-serviceexporter:	build-serviceimports
+	docker run -p 8080:8080 -it danibachar/serviceexporter-msvc:latest
+
+release-serviceexporter:	build-serviceexporter
+	docker push danibachar/serviceexporter-msvc:latest
+
+deploy-serviceexporter:	release-serviceexporter
+	kubectl apply -f go-serviceexporter/kube/app.yaml
+
+delete-serviceexporter:
+	kubectl delete -f go-serviceexporter/kube/app.yaml
+
+expose-serviceexporter:
+	kubectl port-forward service/serviceexporter-msvc 8080:8080
+
 ####### Optimization Job - KOSS
 build-koss:
 	docker build -f py-koss/Dockerfile -t danibachar/koss-job:latest  ..
@@ -87,7 +106,7 @@ delete-koss:
 
 ####### General
 
-release-all:	release-serviceimports release-koss
+release-all:	release-serviceimports release-serviceexporter release-koss
 
 get-all:
 	kubectl get pods

@@ -88,7 +88,7 @@ function install-prometheus-on-clusters() {
         kubectl config use-context "cluster${i}"
         kubectl apply -f submariner-cheatsheet/prometheus/install/manifests/setup
         sleep 2
-        kubectl apply -f apply -f submariner-cheatsheet/prometheus/install/manifests/
+        kubectl apply -f submariner-cheatsheet/prometheus/install/manifests/
         echo
     done
 }
@@ -149,9 +149,9 @@ function deploy-koss-services-on-clusters() {
     done
 }
 
-function deploy-service-import() {
+# function deploy-service-import() {
     
-}
+# }
 
 
 echo "Creating ${NUM_CLUSTERS} clusters"
