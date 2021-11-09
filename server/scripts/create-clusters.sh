@@ -85,6 +85,7 @@ function install-prometheus-on-clusters() {
     local num_clusters=${1}
 
     for i in $(seq "${num_clusters}"); do
+        echo "Deploy Prometheus on: cluster${i}"
         kubectl config use-context "cluster${i}"
         kubectl apply -f submariner-cheatsheet/prometheus/install/manifests/setup
         sleep 2
@@ -99,6 +100,7 @@ function export-prometheus-on-clusters() {
     local num_clusters=${1}
 
     for i in $(seq "${num_clusters}"); do
+        echo "Export Prometheus from: cluster${i}"
         kubectl config use-context "cluster${i}"
         subctl export service prometheus-k8s --namespace monitoring 
         echo
@@ -107,12 +109,14 @@ function export-prometheus-on-clusters() {
 
 # Submariner: Deploy and install
 function install-subctl() {
+    echo "Install subctl locally"
     curl -Ls https://get.submariner.io | bash
     export PATH=$PATH:~/.local/bin
     echo export PATH=\$PATH:~/.local/bin >> ~/.profile
 }
 
 function set-cluster1-as-broker() {
+    echo "Set cluster 1 to be the Broker"
     kubectl config use-context cluster1
     subctl deploy-broker
 }
@@ -125,6 +129,7 @@ function deploy-submariner() {
 
     for i in $(seq "${num_clusters}"); do
         kubectl config use-context "cluster${i}"
+        echo "Join cluster${i} to the mesh"
         subctl join broker-info.subm --clusterid "cluster${i}" --natt=false
         echo
     done
@@ -133,22 +138,28 @@ function deploy-submariner() {
 # KOSS: Deploy and export services
 
 function deploy-koss-services-on-clusters() {
-    # Deploy optimizer only on borker
-    kubectl config use-context cluster1
-    # kubectl apply -f py-koss/kube/job.yaml
     # Deploy koss services
     local num_clusters=${1}
 
     for i in $(seq "${num_clusters}"); do
         kubectl config use-context "cluster${i}"
         # Service-Imports
+        echo "Deploy ServiceImport on: cluster${i}"
         kubectl apply -f go-serviceimports/kube/app.yaml
+        echo "Export ServiceImport from: cluster${i}"
         subctl export service serviceimports-scv
         # Service-Exporter
+        echo "Deploy ServiceExporter on: cluster${i}"
         kubectl apply -f go-serviceexporter/kube/app.yaml
+        echo "Export ServiceExporter from: cluster${i}"
         subctl export service serviceexporter-svc
         echo
     done
+
+    # Deploy optimizer only on borker
+    kubectl config use-context cluster1
+    echo "Deploy optimizer on Broker only"
+    # kubectl apply -f py-koss/kube/job.yaml
 }
 
 # function deploy-service-import() {
@@ -158,9 +169,13 @@ function deploy-koss-services-on-clusters() {
 
 echo "Creating ${NUM_CLUSTERS} clusters"
 create-clusters "${NUM_CLUSTERS}"
+echo "Deploy Prometheus on each cluster"
 install-prometheus-on-clusters "${NUM_CLUSTERS}"
+echo "Deploy Submariner on Clusters"
 deploy-submariner "${NUM_CLUSTERS}"
+echo "Exporting promethues Service using Submariner to allow system access"
 export-prometheus-on-clusters "${NUM_CLUSTERS}"
+echo "Deploy koss"
 deploy-koss-services-on-clusters "${NUM_CLUSTERS}"
 
 echo "Complete"

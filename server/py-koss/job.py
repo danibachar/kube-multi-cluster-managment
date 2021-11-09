@@ -38,8 +38,6 @@ def fetch(url, json_parser, params={}):
     return json_parser(json)
 
 # ServiceImports Fetching
-
-
 def fetch_all_imported_services():
     def parser(json):
         return list(map(lambda item: ServiceImport(item), json.get("items", [])))
@@ -47,8 +45,6 @@ def fetch_all_imported_services():
     return fetch(service_import_api, parser)
 
 # ClusterMetrics Fetching
-
-
 def fetch_metrics_form_all(monitoring_endpoints):
     def parser(json):
         results = json.get("data", {}).get("result", [])

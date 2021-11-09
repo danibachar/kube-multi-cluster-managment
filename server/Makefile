@@ -1,4 +1,4 @@
-####### CLuster
+####### Cluster
 build-cluster:
 	docker build -f go-cluster/Dockerfile -t danibachar/cluster-msvc:latest  ..
 
@@ -72,7 +72,7 @@ delete-serviceimports:
 expose-serviceimports:
 	kubectl port-forward service/serviceimports-msvc 8080:8080
 
-####### Service Imports
+####### Service Exports
 build-serviceexporter:
 	docker build -f go-serviceexporter/Dockerfile -t danibachar/serviceexporter-msvc:latest  ..
 
