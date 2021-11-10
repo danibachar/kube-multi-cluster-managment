@@ -147,7 +147,7 @@ function deploy-koss-services-on-clusters() {
         echo "Deploy ServiceImport on: cluster${i}"
         kubectl apply -f go-serviceimports/kube/app.yaml
         echo "Export ServiceImport from: cluster${i}"
-        subctl export service serviceimports-scv
+        subctl export service serviceimports-svc
         # Service-Exporter
         echo "Deploy ServiceExporter on: cluster${i}"
         kubectl apply -f go-serviceexporter/kube/app.yaml
