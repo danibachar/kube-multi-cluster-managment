@@ -13,9 +13,9 @@ WORKDIR /app
 RUN go mod download
 ## we run go build to compile the binary
 ## executable of our Go program
-RUN go build -o /go-serviceimports
+RUN go build -o /go-serviceexporter
 
 ENV SERVER_PORT=8080
 EXPOSE 8080
 
-CMD ["/go-serviceimports"]
+CMD ["/go-serviceexporter"]

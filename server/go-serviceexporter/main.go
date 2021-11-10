@@ -20,7 +20,7 @@ import (
 func prepareClients() (kubernetes.Interface, mcsClientset.Interface, error) {
 	config, err := restclient.InClusterConfig()
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	mcsClientSet, mcsError := mcsClientset.NewForConfig(config)
 	if mcsError != nil {
@@ -49,11 +49,11 @@ func export(services Exports) error {
 
 	for _, svcExport := range services.servicesToExport {
 		// validate service exists locally
-		_, err := kubeClientSet.CoreV1().Services(svcExport.metadata.Namespace).Get(context.TODO(), svcExport.metadata.Name, metav1.GetOptions{})
+		_, err := kubeClientSet.CoreV1().Services(svcExport.ObjectMeta.Namespace).Get(context.TODO(), svcExport.ObjectMeta.Name, metav1.GetOptions{})
 		if err != nil {
 			continue
 		}
-		_, err = mcsClientSet.MulticlusterV1alpha1.ServiceExport(svcExport.metadata.Namespace).Create(context.TODO(), svcExport, metav1.CreateOption{})
+		_, err = mcsClientSet.MulticlusterV1alpha1().ServiceExports(svcExport.ObjectMeta.Namespace).Create(context.TODO(), &svcExport, metav1.CreateOptions{})
 		if err != nil {
 			return err
 		}
@@ -90,14 +90,14 @@ func main() {
 		}
 		log.Info(exports)
 		return c.JSON(http.StatusOK, exports)
-		err := export(*exports)
-		log.Info("2")
-		if err != nil {
-			log.Info("3")
-			return echo.NewHTTPError(http.StatusInternalServerError, err)
-		}
-		log.Info("4")
-		return c.JSON(http.StatusOK, exports)
+		// err := export(*exports)
+		// log.Info("2")
+		// if err != nil {
+		// 	log.Info("3")
+		// 	return echo.NewHTTPError(http.StatusInternalServerError, err)
+		// }
+		// log.Info("4")
+		// return c.JSON(http.StatusOK, exports)
 	})
 
 	httpPort := os.Getenv("SERVER_PORT")

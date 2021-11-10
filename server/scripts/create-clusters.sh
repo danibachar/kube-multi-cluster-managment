@@ -162,11 +162,6 @@ function deploy-koss-services-on-clusters() {
     # kubectl apply -f py-koss/kube/job.yaml
 }
 
-# function deploy-service-import() {
-    
-# }
-
-
 echo "Creating ${NUM_CLUSTERS} clusters"
 create-clusters "${NUM_CLUSTERS}"
 echo "Deploy Prometheus on each cluster"
