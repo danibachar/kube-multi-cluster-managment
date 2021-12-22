@@ -12,11 +12,13 @@ l
 4) Create a Kubernetes Cluster + Autoscale:
 It is important to set the initail cluster size to be enough to test only the HPA mechanism
 
+```
 gcloud container clusters create "microsvc-us" \
 --zone us-central1-a \
 --machine-type "n1-standard-1" \
 --num-nodes 3 --enable-autoscaling --min-nodes 3 --max-nodes 20 \
 --metadata disable-legacy-endpoints=true
+```
 
 5) Build Image
 
