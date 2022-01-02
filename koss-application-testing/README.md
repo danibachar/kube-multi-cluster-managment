@@ -7,8 +7,6 @@
 
 3) Clone the Kubernetes Repo
 
-l
-
 4) Create a Kubernetes Cluster + Autoscale:
 It is important to set the initail cluster size to be enough to test only the HPA mechanism
 
@@ -26,7 +24,8 @@ gcloud container clusters create "microsvc-us" \
 gcloud container clusters get-credentials microsvc-us --zone=us-central1-a
 
 5.2) Second we need to build and push the container (Described in the Docker File)
-# Make sure you update the Makefile with your own GCP Project
+
+## Make sure you update the Makefile with your own GCP Project
 
 cd hpa
 make build
