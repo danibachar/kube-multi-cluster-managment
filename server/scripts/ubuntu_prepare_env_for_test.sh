@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 # Hoping you have kind, kubectl and docker, and jsonnet installed locally
 
 # Installations if needed
