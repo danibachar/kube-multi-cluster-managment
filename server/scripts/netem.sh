@@ -2,6 +2,9 @@
 
 # Based on - https://gist.github.com/aojea/603e88ba709aac874bd7611752261772
 
+# Example 
+# ./kube-multi-cluster-managment/server/scripts/netem.sh --name=cluster1 --delay=100
+
 set -e
 
 # Get params
@@ -70,6 +73,7 @@ fi
 # and configure it instead, to be more realistic
 INTERFACE="eth0"
 for n in $NODES; do
+    echo "updating ${n}"
     CMD="docker exec -it ${n}"
     # delete any previous configuration (if exist)
     $CMD tc qdisc del dev ${INTERFACE} root || true
