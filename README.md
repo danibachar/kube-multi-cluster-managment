@@ -2,12 +2,16 @@
 Utilizing Kubernetes Cluster-API, Multi-Cluster API and Submariner to build management and observation tool for researching the Kuberntes multi-cluster environment
 
 ## Installation
-- Docker
-- kubectl
-- kind
-- homebrew
+
+- homebrew - all of our installations are using homebrew, which is a package for macOS/linux (`https://stackoverflow.com/questions/33353618/can-i-use-homebrew-on-ubuntu/56982151`)
+- Docker (`brew install docker`)
+- kubectl (`brew install kubernetes-cli`)
+- kind (`brew install kind`)
+-  jsonnet (make sure version 10.5 and above is installed) (`brew install jsonnet`)
+- curl (`brew install curl`)
 
 ## Providers
+
 - AWS - needs Administrator access permissions
 
 ## Step by step - Kind
@@ -37,22 +41,20 @@ clusterctl generate cluster aws-us-east-1 \
 
 clusterctl config cluster test1 --kubernetes-version v1.18.16 --control-plane-machine-count=3 --worker-machine-count=3 | kubectl apply -f -
 
-
 ## Simple tesing on a local managment cluster - creating a work load cluster
-
 
 ## Docker cheatsheet
 
 - Clean up local docker env
 `docker rm -vf $(docker ps -a -q) && docker rmi -f $(docker images -a -q)`
 
-
 ## AWS Mahcine types
+
 - `https://aws.amazon.com/ec2/instance-types/`
 
 ## Kubectl Cheetsheet
-- `https://kubernetes.io/docs/reference/kubectl/cheatsheet/`
 
+- `https://kubernetes.io/docs/reference/kubectl/cheatsheet/`
 
 kubectl --kubeconfig=./capi-quickstart.kubeconfig apply -f https://docs.projectcalico.org/v3.15/manifests/calico.yaml
 
@@ -72,8 +74,6 @@ gcloud compute networks list --project=kmcm-83960
 gcloud compute networks describe default --project=kmcm-83960
 
 kubectl --kubeconfig=./capi-quickstart.kubeconfig get nodes
-
-
 
 // Cluster in asia
 gcloud container clusters create test-europe-west1 --region=europe-west1 --machine-type=e2-micro --num-nodes=1
@@ -183,10 +183,8 @@ subctl show all
 gcloud container clusters get-credentials cluster-a --zone=europe-west3-a --project=kmcm-83960
 CLUSTER_IP=$(kubectl get svc submariner-lighthouse-coredns -n submariner-operator -o=custom-columns=ClusterIP:.spec.clusterIP | tail -n +2)
 
-
 gcloud container clusters get-credentials cluster-b --zone=europe-west3-a --project=kmcm-83960
 CLUSTER_IP=$(kubectl get svc submariner-lighthouse-coredns -n submariner-operator -o=custom-columns=ClusterIP:.spec.clusterIP | tail -n +2)
-
 
 kubectl config delete-cluster gke_kmcm-83960_europe-west3-a_cluster-a
 kubectl config delete-context gke_kmcm-83960_europe-west3-a_cluster-a
