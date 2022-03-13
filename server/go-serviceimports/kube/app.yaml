@@ -71,7 +71,3 @@ subjects:
 #   minReplicas: 1
 #   maxReplicas: 10
 #   targetCPUUtilizationPercentage: 50
-
-http://serviceimports-svc.submariner-operator.svc.clusterset.local:8080/
-
-http://serviceimports-svc.default.svc.clusterset.local:8080
