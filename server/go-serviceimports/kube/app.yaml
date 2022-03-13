@@ -43,8 +43,8 @@ metadata:
   name: serviceimports-reader
 rules:
 - apiGroups: ["multicluster.x-k8s.io"] # "" indicates the core API group
-  resources: ["serviceimport"]
-  verbs: ["get", "watch", "list"]
+  resources: ["*"]
+  verbs: ["get", "watch", "list", "update"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -71,3 +71,7 @@ subjects:
 #   minReplicas: 1
 #   maxReplicas: 10
 #   targetCPUUtilizationPercentage: 50
+
+http://serviceimports-svc.submariner-operator.svc.clusterset.local:8080/
+
+http://serviceimports-svc.default.svc.clusterset.local:8080
