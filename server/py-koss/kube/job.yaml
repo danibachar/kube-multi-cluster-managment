@@ -23,7 +23,7 @@ spec:
             - name: HTTP_REQUEST_SCHEME
               value: "http"
             - name: SERVICE_IMPORT_ENDPOINT
-              value: "serviceimports-svc.default.svc.clusterset.local:8080" #34.106.143.71:8081 #
+              value: "serviceimports-svc:8080" #34.106.143.71:8081 #
             - name: DEBUG_MODE
               value: "true"
           restartPolicy: OnFailure
