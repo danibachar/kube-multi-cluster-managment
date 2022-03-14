@@ -48,5 +48,6 @@ curl -Ls https://get.submariner.io | bash
 export PATH=$PATH:~/.local/bin
 echo export PATH=\$PATH:~/.local/bin >> ~/.profilek
 
-echo "Allow sch_netem to simulate network delay between cluster nodes"
-sudo modprobe sch_netem
+echo "Downloading relevant repos"
+git clone https://github.com/submariner-io/submariner
+git clone https://github.com/danibachar/submariner-cheatsheet

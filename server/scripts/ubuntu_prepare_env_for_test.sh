@@ -3,14 +3,14 @@
 source ~/.profile
 # Submariner 1
 echo "Spinning up clusters using submariner `make clsuters` command"
-git clone https://github.com/submariner-io/submariner
+# git clone https://github.com/submariner-io/submariner
 cd submariner
 make clusters
 cd ..
 
 # Prometheus
 echo "Prepare Promethues" 
-git clone https://github.com/danibachar/submariner-cheatsheet
+# git clone https://github.com/danibachar/submariner-cheatsheet
 cd submariner-cheatsheet/prometheus/install
 jb init
 jb install github.com/prometheus-operator/kube-prometheus/jsonnet/kube-prometheus@release-0.8
@@ -53,4 +53,4 @@ kubectl --kubeconfig submariner/output/kubeconfigs/kind-config-cluster1 apply -f
 
 # Set cluster1 as the default
 export KUBECONFIG=$KUBECONFIG:submariner/output/kubeconfigs/kind-config-cluster1:submariner/output/kubeconfigs/kind-config-cluster2
-kubectl config set-context cluster1
+kubectl config use-context cluster1
