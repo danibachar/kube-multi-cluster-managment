@@ -1,6 +1,6 @@
 #!/bin/bash
 # Hoping you have kind, kubectl and docker, and jsonnet installed locally
-
+source ~/.profile
 # Submariner 1
 echo "Spinning up clusters using submariner `make clsuters` command"
 git clone https://github.com/submariner-io/submariner
