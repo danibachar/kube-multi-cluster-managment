@@ -50,7 +50,7 @@ spec:
 #       targetPort: http-port
 #       protocol: TCP
 ---
-# Prometheus must be installed for this to work
+# Prometheus must make be installed for this to work
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:

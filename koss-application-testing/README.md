@@ -4,8 +4,8 @@
 
 On your management host (must have access to the Kubernetes cluster), you should install the following tools
 
-- Homebrew - all of our installations are using homebrew, which is a package for macOS/linux (`https://stackoverflow.com/questions/33353618/can-i-use-homebrew-on-ubuntu/56982151`)
-- Helm - used as a package manager for Kubernetes (using homebrew `brew install helm` / `arch -arm64 brew install helm`) 
+- Homebrew - all of our installations are using homebrew, which is a package for macOS/linux (`https://stackoverflow.com/questions/33353618/can-i-use-homebrew-on-ubuntu/56982151`) 
+- Helm - used as a package manager for Kubernetes (using homebrew `brew install helm` / `arch -arm64 brew install helm`) or for other linux distributions (`https://helm.sh/docs/intro/install/`)
   - Add repos:
     - `helm repo add bitnami https://charts.bitnami.com/bitnami`
     - `helm repo add prometheus-community https://prometheus-community.github.io/helm-charts`
@@ -32,28 +32,25 @@ On your management host (must have access to the Kubernetes cluster), you should
 
 ### GCP - GKE Cluster
 
-We are teesting on a small, hamble cluster
+We are testing on a small, hamble cluster
 
 - Machine type, `t2d-standard-1` - 1 vCPUs, 4 GB RAM, SSD
 - Cluster size, 3 machines
   
 ```
-gcloud container clusters create "cluster-a"
---region "us-west1"
---machine-type "t2d-standard-1"
---image-type "UBUNTU"
---disk-type "pd-ssd"
---disk-size "15"
---num-nodes "3"
---no-enable-shielded-nodes
---no-shielded-integrity-monitoring
---no-shielded-secure-boot
---cluster-version "1.18.20-gke.4100"
---enable-ip-alias
---enable-network-policy
---enable-intra-node-visibility
---project=ivory-vim-337307
+gcloud container clusters create "microsvc-us" \
+--zone us-central1-a \
+--machine-type "n1-standard-1" \
+--num-nodes 3 \
+--update-addons=HttpLoadBalancing=ENABLED
 ```
+
+Get access to cluster
+
+```
+gcloud container clusters get-credentials microsvc-us --zone="us-central1-a"
+```
+
 
 ## After cluster setup installations
 
@@ -70,12 +67,13 @@ gcloud container clusters create "cluster-a"
     - pwd: `prom-operator`
 
 
-# Application / Test app deployment
+## Application / Test app deployment
 
 - Deploy the load testing applicaition to see how it works under different loads
   - Deploy - `kubectl apply -f load_test.yaml`
   - Expose service - `kubectl port-forward svc/simple-svc 8080:80`
 - Start load testing!
   - Install autocannon `npm i autocannon -g`
+- lunch attack `autocannon -R 1 -d 60 -r 5 -c 5 -w 5 -m POST -H "Content-Type: application/json" -b '{"memory_params": {"duration_seconds": 0.2, "kb_count": 50}, "cpu_params": {"duration_seconds": 0.2, "load": 0.2}}' http://localhost:8080/load`
 
-
+##

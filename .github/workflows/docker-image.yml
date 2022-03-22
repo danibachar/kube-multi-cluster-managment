@@ -22,4 +22,4 @@ jobs:
     - name: Build and upload server images
       run: cd server && make release-all
     - name: Build and upload testing image
-      run: cd koss-application-testing && make build
+      run: cd koss-application-testing && cd kube && make build
