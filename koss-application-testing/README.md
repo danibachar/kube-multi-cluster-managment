@@ -32,11 +32,13 @@ On your management host (must have access to the Kubernetes cluster), you should
 
 ### GCP - GKE Cluster
 
-We are testing on a small, hamble cluster
+We are testing on a small, hamble cluster 
 
 - Machine type, `t2d-standard-1` - 1 vCPUs, 4 GB RAM, SSD
 - Cluster size, 3 machines
-  
+
+It is recommended to run the commands from the GCP console, look at the README.md file for full automation
+
 ```
 gcloud container clusters create "microsvc-us" \
 --zone us-central1-a \

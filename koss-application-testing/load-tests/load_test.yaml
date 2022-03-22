@@ -39,7 +39,7 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: http-port
-      nodePort: 30000
+      # nodePort: 30000
 # spec:
 #     type: LoadBalancer
 #     selector:
