@@ -49,8 +49,8 @@ run-tester:
 ## Installation
 helm-update-repos:
 	helm repo add bitnami https://charts.bitnami.com/bitnami
-    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-  	helm repo update
+	helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+	helm repo update
 
 linux-install-helm:
 	curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -
