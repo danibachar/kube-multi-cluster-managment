@@ -1,0 +1,50 @@
+rules:
+- apiGroups: 
+  - apps
+  resources:
+  - statefulsets
+  verbs: ["*"]
+- apiGroups: [""]
+  resources:
+  - endpointslice
+  - configmaps
+  - secrets
+  verbs: ["*"]
+- apiGroups: 
+  - monitoring.coreos.com
+  resources:
+  - alertmanagerconfigs
+  - alertmanagers/finalizers
+  - alertmanagers
+  - podmonitors
+  - probes
+  - prometheuses/finalizers
+  - prometheuses
+  - prometheusrules
+  - servicemonitors
+  - thanosrulers/finalizers
+  - thanosrulers
+  verbs: ["*"]
+- apiGroups: [""]
+  resources:
+  - endpoints
+  - services/finalizers
+  - services
+  verbs: ["get", "create", "update", "delete"]
+- apiGroups: [""]
+  resources:
+  - namespaces
+  verbs: ["get", "list", "watch"]
+- apiGroups: 
+  - networking.k8s.io
+  resources:
+  - ingresses
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources:
+  - pods
+  verbs: ["list", "delete"]
+- apiGroups: [""]
+  resources:
+  - nodes
+  verbs: ["list", "watch"]

@@ -1,0 +1,15 @@
+# spec:
+#   additionalScrapeConfigs:
+#     enabled: true
+#     name: additional-scrape-configs
+#     key: prometheus-additional.yaml
+prometheus:
+  prometheusSpec:
+    additionalScrapeConfigs:
+      - job_name: "simple-svc-scraping"
+        scrape_interval: 15s
+        metrics_path: /metrics
+        scheme: http
+        static_configs:
+          - targets: ["simple-svc"]
+

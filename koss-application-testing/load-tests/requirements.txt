@@ -1,0 +1,4 @@
+prometheus-client==0.13.1
+requests
+pandas
+numpy

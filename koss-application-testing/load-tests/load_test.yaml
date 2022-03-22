@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: simple-svc
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: simple-svc
+    template:
+        metadata:
+            name: simple-svc
+            labels:
+                app: simple-svc
+        spec:
+            containers:
+            - name: simple-cont
+              image: danibachar/tester:latest
+              imagePullPolicy: Always # to conserve on pulling can change to not allways pull
+              env:
+              - name: RETURN_VALUE
+                value: "simple-svc"
+              ports:
+              - name: http-port
+                containerPort: 8081
+              resources:
+                  requests:
+                      cpu: 200m
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: simple-svc
+spec:
+  type: NodePort
+  selector:
+    app: simple-svc
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: http-port
+      nodePort: 30000
+# spec:
+#     type: LoadBalancer
+#     selector:
+#         app: simple-svc
+#     ports:
+#     - port: 80
+#       nodePort: 30000
+#       targetPort: http-port
+#       protocol: TCP
+---
+# Prometheus must be installed for this to work
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name:  simple-svc-metrics
+  namespace: default
+  labels:
+    app: simple-svc
+spec:
+  selector:
+    matchLabels:
+      app: simple-svc
+  namespaceSelector:
+    any: true
+  targetLabels:
+    - name
+  endpoints:
+  - port: http-port
+    scheme: http
+    path: '/metrics'
+    interval: 15s
+    # honorLabels: true
