@@ -11,15 +11,15 @@ spec:
   rules:
   - http:
       paths:
-      - path: /load/*
-        pathType: Prefix
+      - path: /*
+        pathType: ImplementationSpecific
         backend:
           service: 
             name: simple-svc
             port: 
               number: 80
-      - path: /dashboard/*
-        pathType: Prefix
+      - path: /grafana
+        pathType: ImplementationSpecific
         backend:
           service: 
             name: stable-grafana
