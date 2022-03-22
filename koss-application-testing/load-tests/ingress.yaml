@@ -11,14 +11,14 @@ spec:
   rules:
   - http:
       paths:
-      - path: /*
+      - path: /load
         pathType: ImplementationSpecific
         backend:
           service: 
             name: simple-svc
             port: 
               number: 80
-      - path: /grafana
+      - path: /*
         pathType: ImplementationSpecific
         backend:
           service: 

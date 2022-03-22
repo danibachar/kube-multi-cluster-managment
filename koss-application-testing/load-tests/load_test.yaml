@@ -32,23 +32,14 @@ kind: Service
 metadata:
     name: simple-svc
 spec:
-  type: NodePort
-  selector:
-    app: simple-svc
-  ports:
-    - protocol: TCP
-      port: 80
+    type: LoadBalancer
+    selector:
+        app: simple-svc
+    ports:
+    - port: 80
+      nodePort: 30000
       targetPort: http-port
-      # nodePort: 30000
-# spec:
-#     type: LoadBalancer
-#     selector:
-#         app: simple-svc
-#     ports:
-#     - port: 80
-#       nodePort: 30000
-#       targetPort: http-port
-#       protocol: TCP
+      protocol: TCP
 ---
 # Prometheus must make be installed for this to work
 apiVersion: monitoring.coreos.com/v1
