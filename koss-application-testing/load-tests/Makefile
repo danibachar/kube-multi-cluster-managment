@@ -15,7 +15,7 @@ gcp-clean:
 gcp-dep: gcp-cluster gcp-cluster-auth promethues-prepare dep-test-app dep-ingress
 
 gcp-cluster:
-	gcloud container clusters create "microsvc-us" --zone us-central1-a --machine-type "n1-standard-1" --num-nodes 3 --update-addons=HttpLoadBalancing=ENABLED
+	gcloud container clusters create "microsvc-us" --zone us-central1-a --machine-type "n1-standard-1" --num-nodes 3 --addons=HttpLoadBalancing=ENABLED
 
 gcp-cluster-auth:
 	gcloud container clusters get-credentials microsvc-us --zone="us-central1-a"
