@@ -12,7 +12,7 @@ kind-cluster:
 gcp-clean:
 	gcloud container clusters delete --quiet "microsvc-us" --zone us-central1-a
 
-gcp-dep: gcp-cluster gcp-cluster-auth promethues-prepare dep-test-app
+gcp-dep: gcp-cluster gcp-cluster-auth promethues-prepare dep-test-app dep-ingress
 
 gcp-cluster:
 	gcloud container clusters create "microsvc-us" --zone us-central1-a --machine-type "n1-standard-1" --num-nodes 3 --update-addons=HttpLoadBalancing=ENABLED
