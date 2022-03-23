@@ -1,19 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from flask.json import loads
-from requests.api import delete
 from flask_cors import CORS
-from flask import Flask, request, jsonify
-import os
-import sys
-import requests
-import asyncio
-import json
+from flask import Flask, request
+import os, sys, requests, asyncio, json, logging
 # Generate load
 from cpu_load_generator import load_single_core
 # Custom metrics for flask 
 from prometheus_flask_exporter import PrometheusMetrics
-
 
 # Hack to alter sys path, so we will run from microservices package
 # This hack will require us to import with absolut path from everywhere in this module
@@ -61,6 +54,8 @@ async def propogate_request():
     if dsts == "":
         return []
     futures = []
+    local_loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(local_loop)
     for dst in json.loads(dsts).get("destinations", []):
         target = dst.get("target", None)
         if target is None:
@@ -68,7 +63,7 @@ async def propogate_request():
         config = dst.get("config", {})
         payload_kb_size = dst.get("request_payload_kb_size", 10)  # Def 50KB
         config["dummy_paload_just_for_size"] = memory_chunk(payload_kb_size)
-        f = loop.run_in_executor(None, requests.post, target, None, config)
+        f = local_loop.run_in_executor(None, requests.post, target, None, config)
         futures.append(f)
     responses = await asyncio.gather(*futures)
     return list(filter(lambda t: t != "", map(lambda res: res.text, responses)))
@@ -83,8 +78,9 @@ def health():
 def load():
     load_options = request.json
     print("running load with options {}".format(load_options))
-
-    responses = loop.run_until_complete(asyncio.gather(
+    local_loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(local_loop)
+    responses = local_loop.run_until_complete(asyncio.gather(
         generate_memory_load(load_options.get('memory_params', {})),
         generate_cpu_load(load_options.get('cpu_params', {})),
         propogate_request(),
@@ -102,4 +98,7 @@ def load():
 
 if __name__ == '__main__':
     # threaded=True is a debugging feature, use WSGI for production!
+    gunicorn_logger = logging.getLogger('gunicorn.error')
+    app.logger.handlers = gunicorn_logger.handlers
+    app.logger.setLevel(gunicorn_logger.level)
     app.run(host='0.0.0.0', port='8081', threaded=False)
