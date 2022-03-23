@@ -12,10 +12,14 @@ kind-cluster:
 gcp-clean:
 	gcloud container clusters delete --quiet "microsvc-us" --zone us-central1-a
 
-gcp-dep: gcp-cluster gcp-cluster-auth promethues-prepare dep-test-app dep-ingress
+gcp-cluster-clean: del-test-app del-ingress
+
+gcp-dep: gcp-cluster gcp-cluster-auth promethues-prepare gcp-cluster-dep
+
+gcp-cluster-dep: dep-test-app dep-ingress
 
 gcp-cluster:
-	gcloud container clusters create "microsvc-us" --zone us-central1-a --machine-type "n1-standard-1" --num-nodes 3 --addons=HttpLoadBalancing=ENABLED
+	gcloud container clusters create "microsvc-us" --zone us-central1-a --machine-type "n1-standard-1" --num-nodes 3 --addons=HttpLoadBalancing
 
 gcp-cluster-auth:
 	gcloud container clusters get-credentials microsvc-us --zone="us-central1-a"
@@ -37,6 +41,9 @@ dep-ingress:
 
 del-ingress:
 	kubectl delete -f ingress.yaml
+
+get-ingress:
+	kubectl get ingress load-test --output yaml
 
 expose-svc:
 	kubectl port-forward svc/stable-grafana 8081:80 &

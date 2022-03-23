@@ -25,3 +25,10 @@ spec:
             name: stable-grafana
             port: 
               number: 80
+      - path: /prometheus
+        pathType: ImplementationSpecific
+        backend:
+          service: 
+            name: stable-kube-prometheus-sta-prometheus
+            port: 
+              number: 9090

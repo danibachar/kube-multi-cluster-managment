@@ -20,12 +20,17 @@ spec:
               env:
               - name: RETURN_VALUE
                 value: "simple-svc"
+              readinessProbe:
+                httpGet:
+                path: /health
+                port: 8081
               ports:
               - name: http-port
                 containerPort: 8081
               resources:
                   requests:
                       cpu: 200m
+                      memory: 50M
 ---
 apiVersion: v1
 kind: Service
