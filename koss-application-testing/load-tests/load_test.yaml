@@ -32,7 +32,7 @@ spec:
               resources:
                   requests:
                       cpu: 200m
-                      memory: 50M
+                      memory: 200M
 ---
 apiVersion: v1
 kind: Service

@@ -23,7 +23,7 @@ build:
 
 build-vanila:
 	docker build -f Dockerfile -t danibachar/tester-vanila:latest .
-	docker push danibachar/tester:latest
+	docker push danibachar/tester-vanila:latest
 
 run:
 	docker run -p 8080:8081 danibachar/tester:latest
