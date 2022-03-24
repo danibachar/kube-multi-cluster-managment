@@ -79,3 +79,10 @@ gcloud container clusters get-credentials microsvc-us --zone="us-central1-a"
 - lunch attack `autocannon -R 1 -d 60 -r 5 -c 5 -w 5 -m POST -H "Content-Type: application/json" -b '{"memory_params": {"duration_seconds": 0.2, "kb_count": 50}, "cpu_params": {"duration_seconds": 0.2, "load": 0.2}}' http://localhost:8080/load`
 
 ##
+
+autocannon  -d 3600 -r 5 -c 5 -w 5 -R 5 -m POST -H "Content-Type: application/json" -b '{"memory_params": {"duration_seconds": 0.2, "kb_count": 50}, "cpu_params": {"duration_seconds": 0.2, "load": 0.2}}' http://34.132.117.232/load
+
+- Installing K6 - modern load testing framework
+  - [Installation guidelines](https://k6.io/docs/getting-started/installation/)
+  - [Running](https://k6.io/docs/getting-started/running-k6/)
+  - Great article about [constant-arrival-rate](https://k6.io/blog/how-to-generate-a-constant-request-rate-with-the-new-scenarios-api/)

@@ -3,4 +3,4 @@ workers = 4
 loglevel = 'info'
 worker_class = 'gevent'
 worker_connections = 1000
-timeout = 10 # Note low timeout to mimik failure
+timeout = 4 # Note low timeout to mimik failure

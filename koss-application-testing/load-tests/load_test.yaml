@@ -26,13 +26,22 @@ spec:
                   port: 8081
                 initialDelaySeconds: 5
                 periodSeconds: 10
+              readinessProbe:
+                httpGet:
+                  path: /health
+                  port: 8081
+                initialDelaySeconds: 5
+                periodSeconds: 10
               ports:
               - name: http-port
                 containerPort: 8081
               resources:
                   requests:
-                      cpu: 200m
-                      memory: 200M
+                      cpu: 100m
+                      memory: 250M
+                  limits:
+                    memory: 250m
+                    cpu: 500M
 ---
 apiVersion: v1
 kind: Service
@@ -44,7 +53,7 @@ spec:
         app: simple-svc
     ports:
     - port: 80
-      # nodePort: 30000 d
+      # nodePort: 30000
       targetPort: http-port
       protocol: TCP
 ---
